@@ -38,6 +38,7 @@ export interface CreateEventDto {
   duration: number;
   category: string;
   totalSeats: number;
+  organizerEmail?: string;
 }
 
 export interface UpdateEventDto {

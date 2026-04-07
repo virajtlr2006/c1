@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useUser, useAuth, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
-import { setAuthTokenGetter } from './api/client';
+import { setAuthTokenGetter, setUserEmailGetter } from './api/client';
 import EventList from './components/events/EventList';
 import EventDetail from './components/events/EventDetail';
 import EventForm from './components/events/EventForm';
@@ -114,22 +114,37 @@ const App: React.FC = () => {
 
   // Set up authentication token getter for API client
   useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      setAuthTokenGetter(async () => {
+    if (isLoaded && isSignedIn && user) {
+      const userEmail = user.emailAddresses[0]?.emailAddress || user.id;
+      console.log('🔧 Setting up auth token getter for user:', userEmail);
+
+      const tokenGetter = async () => {
         try {
+          console.log('🔑 Attempting to get Clerk token...');
           const token = await getToken();
+          console.log('✅ Token obtained:', token ? 'Token received' : 'No token');
           return token;
         } catch (error) {
-          console.warn('Failed to get Clerk token:', error);
+          console.warn('❌ Failed to get Clerk token:', error);
           return null;
         }
-      });
+      };
+
+      const emailGetter = () => {
+        return user.emailAddresses[0]?.emailAddress || null;
+      };
+
+      setAuthTokenGetter(tokenGetter);
+      setUserEmailGetter(emailGetter);
       setAuthSetup(true);
     } else if (isLoaded && !isSignedIn) {
       // Clear auth setup when not signed in
+      console.log('🔧 Clearing auth setup - user not signed in');
+      setAuthTokenGetter(() => async () => null);
+      setUserEmailGetter(() => () => null);
       setAuthSetup(false);
     }
-  }, [isLoaded, isSignedIn, getToken]);
+  }, [isLoaded, isSignedIn, user]);
 
   // Show loading while Clerk is initializing
   if (!isLoaded || (isSignedIn && !authSetup)) {

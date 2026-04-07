@@ -5,6 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       userEmail?: string;
+      userId?: string;
     }
   }
 }
@@ -24,9 +25,15 @@ function decodeJWTPayload(token: string): any {
       return null;
     }
 
-    // Decode base64 payload
-    const payload = Buffer.from(parts[1], 'base64').toString('utf-8');
-    return JSON.parse(payload);
+    // Decode base64 payload (add padding if needed)
+    let payload = parts[1];
+    // Add padding if needed for proper base64 decoding
+    while (payload.length % 4) {
+      payload += '=';
+    }
+
+    const decoded = Buffer.from(payload, 'base64').toString('utf-8');
+    return JSON.parse(decoded);
   } catch (error) {
     console.error('Error decoding JWT:', error);
     return null;
@@ -36,10 +43,14 @@ function decodeJWTPayload(token: string): any {
 // Require authentication - check for authorization header
 export const requireAuth = (req: Request, res: Response, next: NextFunction): void => {
   try {
+    console.log('🔐 Auth check for:', req.method, req.path);
+
     // Check for authorization header (would be set by Clerk on frontend)
     const authHeader = req.headers.authorization;
+    console.log('🔍 Auth header:', authHeader ? 'Present' : 'Missing');
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      console.log('❌ No valid auth header found');
       res.status(401).json({
         success: false,
         error: 'Authentication required'
@@ -49,24 +60,34 @@ export const requireAuth = (req: Request, res: Response, next: NextFunction): vo
 
     // Extract token
     const token = authHeader.substring(7); // Remove "Bearer "
+    console.log('🎫 Token extracted, length:', token.length);
 
-    // Decode JWT to get user email
+    // Decode JWT to get user info
     const payload = decodeJWTPayload(token);
 
-    if (payload && payload.email) {
-      req.userEmail = payload.email;
-    } else if (payload && payload.primaryEmailAddress) {
-      // Clerk sometimes puts email in primaryEmailAddress
-      req.userEmail = payload.primaryEmailAddress;
-    } else if (payload && payload.email_addresses && payload.email_addresses.length > 0) {
-      // Sometimes email is in an array
-      req.userEmail = payload.email_addresses[0].email_address || payload.email_addresses[0];
-    } else {
-      // Fallback to mock email if no email found in token
-      req.userEmail = `user-${token.substring(0, 8)}@clerk.com`;
-    }
+    if (payload && payload.sub) {
+      // Use the Clerk user ID (sub field) to create a consistent user identifier
+      const userId = payload.sub;
 
-    next();
+      // For development: create email from user ID
+      // In production, you'd validate the token with Clerk's API to get real email
+      const userEmail = `${userId.replace('user_', '')}@clerk.dev`;
+
+      req.userId = userId;
+      req.userEmail = userEmail;
+
+      console.log('✅ Authenticated user ID:', userId);
+      console.log('✅ Using email:', userEmail);
+
+      next();
+    } else {
+      console.error('❌ No user ID found in JWT payload');
+      res.status(401).json({
+        success: false,
+        error: 'Invalid authentication token'
+      });
+      return;
+    }
   } catch (error) {
     console.error('Auth error:', error);
     res.status(500).json({
@@ -83,16 +104,14 @@ export const optionalAuth = (req: Request, _res: Response, next: NextFunction): 
 
     if (authHeader && authHeader.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-
-      // Decode JWT to get user email
       const payload = decodeJWTPayload(token);
 
-      if (payload && payload.email) {
-        req.userEmail = payload.email;
-      } else if (payload && payload.primaryEmailAddress) {
-        req.userEmail = payload.primaryEmailAddress;
-      } else if (payload && payload.email_addresses && payload.email_addresses.length > 0) {
-        req.userEmail = payload.email_addresses[0].email_address || payload.email_addresses[0];
+      if (payload && payload.sub) {
+        const userId = payload.sub;
+        const userEmail = `${userId.replace('user_', '')}@clerk.dev`;
+
+        req.userId = userId;
+        req.userEmail = userEmail;
       }
     }
 

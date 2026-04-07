@@ -12,27 +12,50 @@ const apiClient = axios.create({
   withCredentials: true, // Include cookies for Clerk authentication
 });
 
-// Function to get auth token from Clerk (to be called from components)
+// Function to get auth token and user email from Clerk (to be called from components)
 let getAuthToken: (() => Promise<string | null>) | null = null;
+let getUserEmail: (() => string | null) | null = null;
 
 export const setAuthTokenGetter = (tokenGetter: () => Promise<string | null>) => {
   getAuthToken = tokenGetter;
 };
 
+export const setUserEmailGetter = (emailGetter: () => string | null) => {
+  getUserEmail = emailGetter;
+};
+
 // Add auth token to requests
 apiClient.interceptors.request.use(async (config) => {
+  console.log('🌐 Making API request to:', config.url);
+
   if (getAuthToken) {
+    console.log('🔑 Auth token getter is available');
     try {
       const token = await getAuthToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+        console.log('✅ Auth token added to request:', config.url, 'Token length:', token.length);
+
+        // Add user email to request if available and needed
+        if (getUserEmail && (config.method === 'post' || config.method === 'put') && config.url?.includes('/events')) {
+          const userEmail = getUserEmail();
+          if (userEmail && config.data) {
+            config.data.organizerEmail = userEmail;
+            console.log('📧 Added user email to request:', userEmail);
+          }
+        }
+      } else {
+        console.warn('⚠️ No auth token available for request:', config.url);
       }
     } catch (error) {
-      console.warn('Failed to get auth token:', error);
+      console.warn('❌ Failed to get auth token for:', config.url, error);
     }
+  } else {
+    console.warn('⚠️ Auth token getter NOT SET for request:', config.url);
   }
   return config;
 }, (error) => {
+  console.error('❌ Request interceptor error:', error);
   return Promise.reject(error);
 });
 

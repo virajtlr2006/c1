@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useUser } from '@clerk/nextjs';
 import { Registration } from '../../api/types';
 import { registrationsApi } from '../../api/client';
 
@@ -7,12 +8,19 @@ interface MyRegistrationsProps {
 }
 
 const MyRegistrations: React.FC<MyRegistrationsProps> = ({ onEventSelect }) => {
+  const { isSignedIn, isLoaded } = useUser();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadRegistrations();
-  }, []);
+    // Only load registrations if user is authenticated and Clerk has loaded
+    if (isLoaded && isSignedIn) {
+      loadRegistrations();
+    } else if (isLoaded && !isSignedIn) {
+      // If not signed in, clear loading state
+      setLoading(false);
+    }
+  }, [isLoaded, isSignedIn]);
 
   const loadRegistrations = async () => {
     try {
