@@ -202,14 +202,14 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
       <Navigation
         userEmail={userEmail}
         currentView={appState.view}
         onViewChange={handleViewChange}
       />
 
-      <main className="py-6">
+      <main className="min-h-screen bg-gray-50 py-6">
         {appState.view === 'events' && (
           <EventList
             onEventSelect={handleEventSelect}
@@ -248,7 +248,7 @@ const App: React.FC = () => {
           />
         )}
       </main>
-    </div>
+    </>
   );
 };
 
