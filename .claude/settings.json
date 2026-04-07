@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -E \"^\\\\.\\\\/[^\\\\/]*$|^\\\\.\\\\/[^\\\\/]*\\\\/[^\\\\/]*$\")",
+      "Bash(ls -la frontend/next.config.*)",
+      "Read(//Users/the/Desktop/devs/event-management-website/backend/db/**)",
+      "Bash(pnpm db:push)",
+      "Bash(pnpm dev:*)",
+      "Bash(netstat -tlnp)",
+      "Bash(kill 32827)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(kill 48067)",
+      "Bash(kill 56435)"
+    ]
+  }
+}
