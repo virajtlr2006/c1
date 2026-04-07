@@ -22,49 +22,69 @@ const Navigation: React.FC<{
   onViewChange: (view: ViewType) => void;
 }> = ({ userEmail, currentView, onViewChange }) => {
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center space-x-8">
-            <h1 className="text-xl font-bold text-gray-900">Event Manager</h1>
-            <div className="flex space-x-4">
+    <nav className="nav-modern">
+      <div className="container">
+        <div className="flex-between" style={{ height: '4rem' }}>
+          {/* Logo and Brand */}
+          <div className="flex" style={{ alignItems: 'center', gap: '2rem' }}>
+            <div className="flex" style={{ alignItems: 'center', gap: '0.75rem' }}>
+              <div
+                style={{
+                  width: '2rem',
+                  height: '2rem',
+                  background: 'var(--primary-gradient)',
+                  borderRadius: 'var(--radius-lg)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'white',
+                  fontSize: '1.125rem',
+                  fontWeight: 'bold'
+                }}
+              >
+                E
+              </div>
+              <h1 className="text-display-sm gradient-text" style={{ margin: 0 }}>
+                EventFlow
+              </h1>
+            </div>
+
+            {/* Navigation Links */}
+            <div className="flex" style={{ gap: '0.5rem' }}>
               <button
                 onClick={() => onViewChange('events')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                className={`nav-link ${
                   currentView === 'events' || currentView === 'event-detail' || currentView === 'event-form'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-500 hover:text-gray-700'
+                    ? 'active'
+                    : ''
                 }`}
               >
-                Events
+                🌟 Discover
               </button>
               <button
                 onClick={() => onViewChange('my-events')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  currentView === 'my-events'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={`nav-link ${currentView === 'my-events' ? 'active' : ''}`}
               >
-                My Events
+                🎯 My Events
               </button>
               <button
                 onClick={() => onViewChange('registrations')}
-                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  currentView === 'registrations'
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
+                className={`nav-link ${currentView === 'registrations' ? 'active' : ''}`}
               >
-                My Registrations
+                🎫 Registered
               </button>
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">
-              👤 {userEmail}
-            </span>
+          {/* User Section */}
+          <div className="flex" style={{ alignItems: 'center', gap: '1rem' }}>
+            <div
+              className="text-body-sm"
+              style={{ color: 'var(--text-secondary)' }}
+            >
+              <span style={{ marginRight: '0.5rem' }}>👋</span>
+              {userEmail.split('@')[0]}
+            </div>
             <UserButton afterSignOutUrl="/" />
           </div>
         </div>
@@ -75,31 +95,157 @@ const Navigation: React.FC<{
 
 const SignInPage: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full space-y-8 p-8">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">Event Management</h2>
-          <p className="text-gray-600 mb-8">Sign in to manage and discover events</p>
-        </div>
+    <div
+      className="flex-center"
+      style={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        position: 'relative'
+      }}
+    >
+      {/* Background Pattern */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                           radial-gradient(circle at 75% 75%, rgba(255,255,255,0.05) 0%, transparent 50%)`,
+        }}
+      />
 
-        <div className="space-y-4">
-          <SignInButton mode="modal">
-            <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium">
-              Sign In
-            </button>
-          </SignInButton>
+      <div className="container">
+        <div
+          className="card-glass animate-scale-in"
+          style={{
+            maxWidth: '28rem',
+            margin: '0 auto',
+            padding: '3rem',
+            textAlign: 'center'
+          }}
+        >
+          {/* Logo Section */}
+          <div
+            style={{
+              marginBottom: '2rem',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flexDirection: 'column',
+              gap: '1rem'
+            }}
+          >
+            <div
+              style={{
+                width: '4rem',
+                height: '4rem',
+                background: 'var(--primary-gradient)',
+                borderRadius: 'var(--radius-2xl)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontSize: '1.5rem',
+                fontWeight: 'bold',
+                boxShadow: 'var(--shadow-lg)'
+              }}
+            >
+              ✨
+            </div>
+            <div>
+              <h2 className="text-display-md" style={{ margin: 0, marginBottom: '0.5rem' }}>
+                Welcome to <span className="gradient-text">EventFlow</span>
+              </h2>
+              <p className="text-body-md" style={{ color: 'var(--text-secondary)', margin: 0 }}>
+                Discover amazing events and create memorable experiences
+              </p>
+            </div>
+          </div>
 
-          <div className="text-center text-gray-500">or</div>
+          {/* Features Grid */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '1rem',
+              marginBottom: '2rem',
+              padding: '1rem',
+              background: 'var(--surface-hover)',
+              borderRadius: 'var(--radius-lg)',
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🎪</div>
+              <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>Discover</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🎯</div>
+              <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>Create</div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>🤝</div>
+              <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>Connect</div>
+            </div>
+          </div>
 
-          <SignUpButton mode="modal">
-            <button className="w-full bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-medium">
-              Create Account
-            </button>
-          </SignUpButton>
-        </div>
+          {/* Sign In Buttons */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <SignInButton mode="modal">
+              <button className="btn btn-primary btn-lg" style={{ width: '100%' }}>
+                <span>🚀</span>
+                Sign In
+              </button>
+            </SignInButton>
 
-        <div className="text-center text-sm text-gray-500">
-          Sign in to create events, register for events, and manage your registrations.
+            <div
+              className="text-body-sm"
+              style={{
+                color: 'var(--text-muted)',
+                position: 'relative',
+                margin: '0.5rem 0'
+              }}
+            >
+              <span
+                style={{
+                  background: 'var(--surface)',
+                  padding: '0 1rem',
+                  position: 'relative',
+                  zIndex: 1
+                }}
+              >
+                or
+              </span>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '50%',
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background: 'var(--border)',
+                  zIndex: 0
+                }}
+              />
+            </div>
+
+            <SignUpButton mode="modal">
+              <button className="btn btn-secondary btn-lg" style={{ width: '100%' }}>
+                <span>✨</span>
+                Create Account
+              </button>
+            </SignUpButton>
+          </div>
+
+          {/* Footer Text */}
+          <div
+            className="text-body-sm"
+            style={{
+              color: 'var(--text-tertiary)',
+              marginTop: '2rem',
+              lineHeight: 1.5
+            }}
+          >
+            Join our community to create events, discover new experiences, and connect with others.
+          </div>
         </div>
       </div>
     </div>
@@ -147,12 +293,35 @@ const App: React.FC = () => {
   }, [isLoaded, isSignedIn, user]);
 
   // Show loading while Clerk is initializing
-  if (!isLoaded || (isSignedIn && !authSetup)) {
+  if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+      <div
+        className="flex-center"
+        style={{
+          minHeight: '100vh',
+          background: 'var(--background-secondary)'
+        }}
+      >
+        <div style={{ textAlign: 'center' }}>
+          <div
+            className="animate-scale-in"
+            style={{
+              width: '3rem',
+              height: '3rem',
+              background: 'var(--primary-gradient)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem',
+              animation: 'spin 1s linear infinite'
+            }}
+          >
+            <div style={{ color: 'white', fontSize: '1.25rem', fontWeight: 'bold' }}>E</div>
+          </div>
+          <p className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>
+            Loading your events...
+          </p>
         </div>
       </div>
     );
@@ -209,7 +378,13 @@ const App: React.FC = () => {
         onViewChange={handleViewChange}
       />
 
-      <main className="min-h-screen bg-gray-50 py-6">
+      <main
+        style={{
+          minHeight: 'calc(100vh - 4rem)',
+          background: 'var(--background)',
+          paddingTop: 'var(--space-lg)'
+        }}
+      >
         {appState.view === 'events' && (
           <EventList
             onEventSelect={handleEventSelect}

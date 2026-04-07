@@ -61,19 +61,6 @@ const MyRegistrations: React.FC<MyRegistrationsProps> = ({ onEventSelect }) => {
     });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'registered':
-        return 'bg-green-100 text-green-800';
-      case 'cancelled':
-        return 'bg-red-100 text-red-800';
-      case 'attended':
-        return 'bg-blue-100 text-blue-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   const isEventInFuture = (eventTime?: string) => {
     if (!eventTime) return false;
     return new Date(eventTime) > new Date();
@@ -81,69 +68,313 @@ const MyRegistrations: React.FC<MyRegistrationsProps> = ({ onEventSelect }) => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="text-center py-8">Loading your registrations...</div>
+      <div className="container section">
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'var(--primary-gradient)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto var(--space-md)',
+                animation: 'spin 1s linear infinite'
+              }}
+            >
+              <span style={{ color: 'white', fontSize: '1.25rem' }}>🎫</span>
+            </div>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)' }}>
+              Loading your registrations...
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">My Registrations</h1>
+    <div className="container section">
+      {/* Hero Header */}
+      <div style={{ textAlign: 'center', marginBottom: 'var(--space-3xl)' }}>
+        <div className="animate-fade-in">
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>🎫</div>
+          <h1 className="text-display-lg" style={{ marginBottom: 'var(--space-md)' }}>
+            My <span className="gradient-text">Registrations</span>
+          </h1>
+          <p className="text-body-lg" style={{ color: 'var(--text-secondary)', maxWidth: '32rem', margin: '0 auto var(--space-xl)' }}>
+            Track your event registrations and manage your upcoming experiences.
+          </p>
+        </div>
+      </div>
 
-      {registrations.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
-          <div className="text-gray-500 mb-4">
-            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-            </svg>
+      {/* Stats Summary */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: 'var(--space-lg)',
+          marginBottom: 'var(--space-3xl)'
+        }}
+        className="animate-slide-up"
+      >
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            📊
           </div>
-          <p className="text-lg text-gray-500">No registrations yet</p>
-          <p className="text-sm text-gray-400 mt-2">Register for events to see them here</p>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--primary)' }}>
+            {registrations.length}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Total Registrations
+          </div>
+        </div>
+
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            ✅
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--success)' }}>
+            {registrations.filter(r => r.status === 'registered').length}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Active Registrations
+          </div>
+        </div>
+
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            🎭
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--secondary)' }}>
+            {registrations.filter(r => r.status === 'attended').length}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Events Attended
+          </div>
+        </div>
+      </div>
+
+      {/* Registrations List */}
+      {registrations.length === 0 ? (
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: 'var(--space-lg)' }}>🎪</div>
+            <h3 className="text-heading-lg" style={{ marginBottom: 'var(--space-md)' }}>
+              No registrations yet
+            </h3>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
+              Start exploring and register for amazing events to see them here.
+            </p>
+            <div className="card" style={{ padding: 'var(--space-lg)', background: 'var(--primary-light)' }}>
+              <p className="text-body-sm" style={{ color: 'var(--primary)' }}>
+                💡 Tip: Visit the Discover page to find events that interest you!
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="space-y-4">
-          {registrations.map((registration) => (
+        <div className="grid-cards animate-fade-in">
+          {registrations.map((registration, index) => (
             <div
               key={registration.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="card card-elevated"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
             >
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <h3
-                      className="text-xl font-semibold text-gray-900 cursor-pointer hover:text-blue-600"
-                      onClick={() => onEventSelect(registration.eventId)}
-                    >
-                      {registration.eventName || `Event #${registration.eventId}`}
-                    </h3>
-                    <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(registration.status)}`}>
-                      {registration.status}
-                    </span>
-                  </div>
+              {/* Status Badge */}
+              <div style={{
+                position: 'absolute',
+                top: 'var(--space-md)',
+                right: 'var(--space-md)',
+                zIndex: 2
+              }}>
+                <span className="text-caption" style={{
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.625rem',
+                  fontWeight: '600',
+                  background: registration.status === 'registered' ?
+                    'var(--success-light)' :
+                    registration.status === 'cancelled' ?
+                      'var(--error-light)' :
+                      registration.status === 'attended' ?
+                        'var(--info-light)' :
+                        'var(--warning-light)',
+                  color: registration.status === 'registered' ?
+                    'var(--success)' :
+                    registration.status === 'cancelled' ?
+                      'var(--error)' :
+                      registration.status === 'attended' ?
+                        'var(--info)' :
+                        'var(--warning)'
+                }}>
+                  {registration.status.toUpperCase()}
+                </span>
+              </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
-                    <div>
-                      <p className="font-medium text-gray-500">Event Date</p>
-                      <p>{registration.eventTime ? formatDate(registration.eventTime) : 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-500">Location</p>
-                      <p>{registration.eventLocation || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-500">Registered On</p>
-                      <p>{formatDate(registration.registeredAt)}</p>
-                    </div>
+              {/* Registration Header */}
+              <div style={{
+                height: '6rem',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 'var(--space-lg)'
+              }}>
+                <div style={{
+                  fontSize: '2.5rem',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }}>
+                  {getRegistrationEmoji(registration.status)}
+                </div>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: `linear-gradient(135deg,
+                    rgba(99, 102, 241, 0.8) 0%,
+                    rgba(139, 92, 246, 0.6) 50%,
+                    rgba(249, 115, 22, 0.4) 100%)`
+                }} />
+              </div>
+
+              {/* Event Content */}
+              <div>
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <h3
+                    className="text-heading-md line-clamp-2"
+                    style={{ marginBottom: '0.5rem', cursor: 'pointer' }}
+                    onClick={() => onEventSelect(registration.eventId)}
+                  >
+                    {registration.eventName || `Event #${registration.eventId}`}
+                  </h3>
+                </div>
+
+                {/* Event Details */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📅</span>
+                    {registration.eventTime ? formatDate(registration.eventTime) : 'Date TBD'}
+                  </div>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📍</span>
+                    {registration.eventLocation || 'Location TBD'}
+                  </div>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>🎫</span>
+                    Registered on {formatDate(registration.registeredAt)}
                   </div>
                 </div>
 
-                <div className="ml-6 flex flex-col space-y-2">
+                {/* Status Message */}
+                {registration.status === 'cancelled' && (
+                  <div style={{
+                    padding: 'var(--space-md)',
+                    background: 'var(--error-light)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-md)'
+                  }}>
+                    <p className="text-body-sm" style={{ color: 'var(--error)' }}>
+                      ⚠️ This registration has been cancelled
+                    </p>
+                  </div>
+                )}
+
+                {registration.status === 'attended' && (
+                  <div style={{
+                    padding: 'var(--space-md)',
+                    background: 'var(--info-light)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-md)'
+                  }}>
+                    <p className="text-body-sm" style={{ color: 'var(--info)' }}>
+                      🎉 You attended this event!
+                    </p>
+                  </div>
+                )}
+
+                {registration.status === 'registered' &&
+                 registration.eventTime &&
+                 !isEventInFuture(registration.eventTime) && (
+                  <div style={{
+                    padding: 'var(--space-md)',
+                    background: 'var(--warning-light)',
+                    borderRadius: 'var(--radius-lg)',
+                    marginBottom: 'var(--space-md)'
+                  }}>
+                    <p className="text-body-sm" style={{ color: 'var(--warning)' }}>
+                      📅 This event has already occurred
+                    </p>
+                  </div>
+                )}
+
+                {/* Actions */}
+                <div style={{
+                  paddingTop: 'var(--space-md)',
+                  borderTop: '1px solid var(--border)',
+                  display: 'flex',
+                  gap: 'var(--space-sm)',
+                  flexWrap: 'wrap'
+                }}>
                   <button
                     onClick={() => onEventSelect(registration.eventId)}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium"
+                    className="btn btn-primary btn-sm"
+                    style={{ flex: '1' }}
                   >
-                    View Event
+                    👁️ View Event
                   </button>
 
                   {registration.status === 'registered' &&
@@ -151,52 +382,58 @@ const MyRegistrations: React.FC<MyRegistrationsProps> = ({ onEventSelect }) => {
                    isEventInFuture(registration.eventTime) && (
                     <button
                       onClick={() => handleCancelRegistration(registration.id)}
-                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium"
+                      className="btn btn-ghost btn-sm"
+                      style={{
+                        color: 'var(--error)',
+                        border: '1px solid var(--error)',
+                        flex: '1'
+                      }}
                     >
-                      Cancel
+                      ❌ Cancel
                     </button>
                   )}
                 </div>
               </div>
-
-              {/* Registration Status Info */}
-              {registration.status === 'cancelled' && (
-                <div className="mt-4 p-3 bg-red-50 rounded-md">
-                  <p className="text-sm text-red-700">
-                    ⚠️ This registration has been cancelled
-                  </p>
-                </div>
-              )}
-
-              {registration.status === 'attended' && (
-                <div className="mt-4 p-3 bg-blue-50 rounded-md">
-                  <p className="text-sm text-blue-700">
-                    ✅ You attended this event
-                  </p>
-                </div>
-              )}
-
-              {registration.status === 'registered' &&
-               registration.eventTime &&
-               !isEventInFuture(registration.eventTime) && (
-                <div className="mt-4 p-3 bg-gray-50 rounded-md">
-                  <p className="text-sm text-gray-700">
-                    📅 This event has already occurred
-                  </p>
-                </div>
-              )}
             </div>
           ))}
         </div>
       )}
 
-      <div className="mt-8 text-center">
-        <p className="text-sm text-gray-500">
-          Total registrations: {registrations.length}
-        </p>
-      </div>
+      {/* Summary Footer */}
+      {registrations.length > 0 && (
+        <div
+          className="card animate-fade-in"
+          style={{
+            marginTop: 'var(--space-3xl)',
+            textAlign: 'center',
+            background: 'var(--primary-light)'
+          }}
+        >
+          <p className="text-body-md" style={{ color: 'var(--primary)', marginBottom: 'var(--space-sm)' }}>
+            📈 Registration Summary
+          </p>
+          <p className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>
+            You've registered for {registrations.length} events total.
+            {registrations.filter(r => r.status === 'attended').length > 0 &&
+              ` Great job attending ${registrations.filter(r => r.status === 'attended').length} events!`
+            }
+          </p>
+        </div>
+      )}
     </div>
   );
+};
+
+// Helper function for registration status emojis
+const getRegistrationEmoji = (status: string): string => {
+  const statusEmojis: { [key: string]: string } = {
+    'registered': '🎫',
+    'cancelled': '❌',
+    'attended': '🎉',
+    'missed': '😔'
+  };
+
+  return statusEmojis[status] || '🎫';
 };
 
 export default MyRegistrations;

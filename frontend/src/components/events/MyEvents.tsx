@@ -65,214 +65,418 @@ const MyEvents: React.FC<MyEventsProps> = ({ onEventSelect, onCreateEvent, onEdi
     });
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'published': return 'bg-green-100 text-green-800';
-      case 'cancelled': return 'bg-red-100 text-red-800';
-      case 'completed': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p>Loading your events...</p>
+      <div className="container section">
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'var(--primary-gradient)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto var(--space-md)',
+                animation: 'spin 1s linear infinite'
+              }}
+            >
+              <span style={{ color: 'white', fontSize: '1.25rem' }}>🎯</span>
+            </div>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)' }}>
+              Loading your events...
+            </p>
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">My Events</h1>
-          <p className="text-gray-600 mt-1">Manage events you've created</p>
+    <div className="container section">
+      {/* Hero Header */}
+      <div style={{ textAlign: 'center', marginBottom: 'var(--space-3xl)' }}>
+        <div className="animate-fade-in">
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>🎯</div>
+          <h1 className="text-display-lg" style={{ marginBottom: 'var(--space-md)' }}>
+            My <span className="gradient-text">Events</span>
+          </h1>
+          <p className="text-body-lg" style={{ color: 'var(--text-secondary)', maxWidth: '32rem', margin: '0 auto var(--space-xl)' }}>
+            Manage your events, track registrations, and create amazing experiences.
+          </p>
+          <button onClick={onCreateEvent} className="btn btn-primary btn-lg">
+            <span>✨</span>
+            Create New Event
+          </button>
         </div>
-        <button
-          onClick={onCreateEvent}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium flex items-center"
-        >
-          ➕ Create New Event
-        </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Events</p>
-              <p className="text-2xl font-bold text-gray-900">{events.length}</p>
-            </div>
-            <div className="bg-blue-100 p-3 rounded-full">
-              📅
-            </div>
+      {/* Stats Dashboard */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: 'var(--space-lg)',
+          marginBottom: 'var(--space-3xl)'
+        }}
+        className="animate-slide-up"
+      >
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            📊
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--primary)' }}>
+            {events.length}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Total Events
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Active Events</p>
-              <p className="text-2xl font-bold text-green-600">
-                {events.filter(e => e.status === 'published').length}
-              </p>
-            </div>
-            <div className="bg-green-100 p-3 rounded-full">
-              ✅
-            </div>
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #10b981, #059669)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            ✅
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--success)' }}>
+            {events.filter(e => e.status === 'published').length}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Active Events
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Total Attendees</p>
-              <p className="text-2xl font-bold text-purple-600">
-                {events.reduce((sum, event) => sum + (event.totalSeats - event.availableSeats), 0)}
-              </p>
-            </div>
-            <div className="bg-purple-100 p-3 rounded-full">
-              👥
-            </div>
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #f97316, #ea580c)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            👥
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--accent)' }}>
+            {events.reduce((sum, event) => sum + (event.totalSeats - event.availableSeats), 0)}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Total Attendees
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-gray-600">Available Seats</p>
-              <p className="text-2xl font-bold text-yellow-600">
-                {events.reduce((sum, event) => sum + event.availableSeats, 0)}
-              </p>
-            </div>
-            <div className="bg-yellow-100 p-3 rounded-full">
-              🪑
-            </div>
+        <div className="card card-elevated" style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '3rem',
+            height: '3rem',
+            background: 'linear-gradient(135deg, #0ea5e9, #0284c7)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto var(--space-md)',
+            fontSize: '1.25rem'
+          }}>
+            🪑
+          </div>
+          <div className="text-display-sm" style={{ marginBottom: 'var(--space-sm)', color: 'var(--secondary)' }}>
+            {events.reduce((sum, event) => sum + event.availableSeats, 0)}
+          </div>
+          <div className="text-caption" style={{ color: 'var(--text-secondary)' }}>
+            Available Seats
           </div>
         </div>
       </div>
 
       {/* Events List */}
       {events.length === 0 ? (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <div className="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-3xl">📅</span>
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: 'var(--space-lg)' }}>🎭</div>
+            <h3 className="text-heading-lg" style={{ marginBottom: 'var(--space-md)' }}>
+              Ready to create your first event?
+            </h3>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
+              Start building your community by creating memorable events that bring people together.
+            </p>
+            <button onClick={onCreateEvent} className="btn btn-primary">
+              <span>🚀</span>
+              Create Your First Event
+            </button>
           </div>
-          <h3 className="text-xl font-medium text-gray-900 mb-2">No events yet</h3>
-          <p className="text-gray-500 mb-6">Get started by creating your first event</p>
-          <button
-            onClick={onCreateEvent}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium"
-          >
-            Create Your First Event
-          </button>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Event Details
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date & Time
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Attendees
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {events.map((event) => (
-                  <tr key={event.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <button
-                          onClick={() => onEventSelect(event)}
-                          className="text-left font-medium text-blue-600 hover:text-blue-800 mb-1"
-                        >
-                          {event.name}
-                        </button>
-                        <p className="text-sm text-gray-500 mb-2">{event.location}</p>
-                        <span className="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full w-fit">
-                          {event.category}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {formatDate(event.eventTime)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(event.status)}`}>
-                        {event.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      <div className="flex flex-col">
-                        <span className="font-medium">
-                          {event.totalSeats - event.availableSeats}/{event.totalSeats}
-                        </span>
-                        <div className="w-16 bg-gray-200 rounded-full h-1.5 mt-1">
-                          <div
-                            className="bg-blue-600 h-1.5 rounded-full transition-all"
-                            style={{
-                              width: `${((event.totalSeats - event.availableSeats) / event.totalSeats) * 100}%`
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm space-x-3">
-                      <button
-                        onClick={() => onEventSelect(event)}
-                        className="text-blue-600 hover:text-blue-800 font-medium flex items-center"
-                        title="View Event Details"
-                      >
-                        👁️ View
-                      </button>
-                      <button
-                        onClick={() => onEditEvent(event)}
-                        className="text-green-600 hover:text-green-800 font-medium flex items-center"
-                        title="Edit Event"
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(event.id, event.name)}
-                        disabled={deleting === event.id}
-                        className={`font-medium flex items-center ${
-                          deleting === event.id
-                            ? 'text-gray-400 cursor-not-allowed'
-                            : 'text-red-600 hover:text-red-800'
-                        }`}
-                        title="Delete Event"
-                      >
-                        {deleting === event.id ? '⏳ Deleting...' : '🗑️ Delete'}
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="grid-cards animate-fade-in">
+          {events.map((event, index) => (
+            <div
+              key={event.id}
+              className="card card-elevated"
+              style={{
+                animationDelay: `${index * 0.1}s`,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
+            >
+              {/* Status Badge */}
+              <div style={{
+                position: 'absolute',
+                top: 'var(--space-md)',
+                right: 'var(--space-md)',
+                zIndex: 2
+              }}>
+                <span className={`text-caption`} style={{
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.625rem',
+                  fontWeight: '600',
+                  background: event.status === 'published' ?
+                    'var(--success-light)' :
+                    event.status === 'cancelled' ?
+                      'var(--error-light)' :
+                      'var(--warning-light)',
+                  color: event.status === 'published' ?
+                    'var(--success)' :
+                    event.status === 'cancelled' ?
+                      'var(--error)' :
+                      'var(--warning)'
+                }}>
+                  {event.status.toUpperCase()}
+                </span>
+              </div>
+
+              {/* Event Header */}
+              <div style={{
+                height: '6rem',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 'var(--space-lg)'
+              }}>
+                <div style={{
+                  fontSize: '2.5rem',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }}>
+                  {getCategoryEmoji(event.category)}
+                </div>
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: `linear-gradient(135deg,
+                    rgba(99, 102, 241, 0.8) 0%,
+                    rgba(139, 92, 246, 0.6) 50%,
+                    rgba(249, 115, 22, 0.4) 100%)`
+                }} />
+              </div>
+
+              {/* Event Content */}
+              <div>
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <h3
+                    className="text-heading-md line-clamp-2"
+                    style={{ marginBottom: '0.5rem', cursor: 'pointer' }}
+                    onClick={() => onEventSelect(event)}
+                  >
+                    {event.name}
+                  </h3>
+                  <p className="text-body-sm line-clamp-2" style={{ color: 'var(--text-secondary)' }}>
+                    {event.description}
+                  </p>
+                </div>
+
+                {/* Event Details */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📅</span>
+                    {formatDate(event.eventTime)}
+                  </div>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📍</span>
+                    {event.location}
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div style={{ marginTop: 'var(--space-md)' }}>
+                    <div className="text-body-sm" style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      marginBottom: '0.5rem',
+                      color: 'var(--text-secondary)'
+                    }}>
+                      <span>👥 Registered</span>
+                      <span>{event.totalSeats - event.availableSeats}/{event.totalSeats}</span>
+                    </div>
+                    <div style={{
+                      width: '100%',
+                      height: '8px',
+                      background: 'var(--border-light)',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden'
+                    }}>
+                      <div
+                        style={{
+                          width: `${((event.totalSeats - event.availableSeats) / event.totalSeats) * 100}%`,
+                          height: '100%',
+                          background: 'var(--primary-gradient)',
+                          transition: 'width 0.3s ease'
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div style={{
+                  paddingTop: 'var(--space-md)',
+                  borderTop: '1px solid var(--border)',
+                  display: 'flex',
+                  gap: 'var(--space-sm)',
+                  flexWrap: 'wrap'
+                }}>
+                  <button
+                    onClick={() => onEventSelect(event)}
+                    className="text-body-sm"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--primary)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: 'var(--radius-md)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    👁️ View
+                  </button>
+                  <button
+                    onClick={() => onEditEvent(event)}
+                    className="text-body-sm"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: 'var(--secondary)',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: 'var(--radius-md)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    ✏️ Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(event.id, event.name)}
+                    disabled={deleting === event.id}
+                    className="text-body-sm"
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: deleting === event.id ? 'var(--text-disabled)' : 'var(--error)',
+                      cursor: deleting === event.id ? 'not-allowed' : 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.25rem',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: 'var(--radius-md)',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    {deleting === event.id ? '⏳ Deleting...' : '🗑️ Delete'}
+                  </button>
+                </div>
+
+                {/* Category Tag */}
+                <div style={{ marginTop: 'var(--space-sm)' }}>
+                  <span style={{
+                    padding: '0.25rem 0.5rem',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--primary-light)',
+                    color: 'var(--primary)',
+                    fontSize: '0.625rem',
+                    fontWeight: '600',
+                    textTransform: 'uppercase'
+                  }}>
+                    {event.category}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
   );
+};
+
+// Helper function for category emojis (reuse from EventList)
+const getCategoryEmoji = (category: string): string => {
+  const categoryEmojis: { [key: string]: string } = {
+    'Business': '💼',
+    'Technology': '💻',
+    'Education': '📚',
+    'Entertainment': '🎭',
+    'Sports': '⚽',
+    'Health': '🏥',
+    'Art': '🎨',
+    'Arts & Culture': '🎨',
+    'Music': '🎵',
+    'Food': '🍽️',
+    'Travel': '✈️',
+    'Fashion': '👗',
+    'Gaming': '🎮',
+    'Science': '🔬',
+    'Photography': '📸',
+    'Writing': '✍️',
+    'Finance': '💰',
+    'Marketing': '📢',
+    'Design': '🎯',
+    'Networking': '🤝',
+    'Workshop': '🛠️'
+  };
+
+  return categoryEmojis[category] || '🎪';
 };
 
 export default MyEvents;

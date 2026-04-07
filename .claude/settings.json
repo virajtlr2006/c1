@@ -10,7 +10,10 @@
       "Bash(kill 32827)",
       "Bash(pkill -f \"next dev\")",
       "Bash(kill 48067)",
-      "Bash(kill 56435)"
+      "Bash(kill 56435)",
+      "Bash(kill 72502)",
+      "Bash(npx tsc:*)",
+      "Bash(ls /home/viraj-tailor/Desktop/c1/frontend/.env*)"
     ]
   }
 }

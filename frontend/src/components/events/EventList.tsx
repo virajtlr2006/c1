@@ -89,34 +89,58 @@ const EventList: React.FC<EventListProps> = ({ onEventSelect, onCreateEvent, onE
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Events</h1>
-        <button
-          onClick={onCreateEvent}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
-        >
-          Create Event
-        </button>
+    <div className="container section">
+      {/* Hero Header */}
+      <div style={{ textAlign: 'center', marginBottom: 'var(--space-3xl)' }}>
+        <div className="animate-fade-in">
+          <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>🎪</div>
+          <h1 className="text-display-lg" style={{ marginBottom: 'var(--space-md)' }}>
+            Discover Amazing <span className="gradient-text">Events</span>
+          </h1>
+          <p className="text-body-lg" style={{ color: 'var(--text-secondary)', maxWidth: '32rem', margin: '0 auto var(--space-xl)' }}>
+            Find events that inspire you, connect with your community, and create unforgettable memories.
+          </p>
+          <button onClick={onCreateEvent} className="btn btn-primary btn-lg">
+            <span>✨</span>
+            Create Your Event
+          </button>
+        </div>
       </div>
 
-      {/* Filters */}
-      <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <input
-            type="text"
-            placeholder="Search events..."
-            value={filters.search || ''}
-            onChange={(e) => handleFilterChange('search', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+      {/* Search & Filters */}
+      <div
+        className="card animate-slide-up"
+        style={{ marginBottom: 'var(--space-2xl)', background: 'var(--surface)' }}
+      >
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--space-md)' }}>
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="🔍 Search events..."
+              value={filters.search || ''}
+              onChange={(e) => handleFilterChange('search', e.target.value)}
+              className="input"
+              style={{ paddingLeft: '2.5rem' }}
+            />
+            <div style={{
+              position: 'absolute',
+              left: '0.75rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '1rem',
+              color: 'var(--text-muted)'
+            }}>
+              🔍
+            </div>
+          </div>
 
           <select
             value={filters.category || ''}
             onChange={(e) => handleFilterChange('category', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="input"
+            style={{ cursor: 'pointer' }}
           >
-            <option value="">All Categories</option>
+            <option value="">🏷️ All Categories</option>
             {categories.map((category) => (
               <option key={category.name} value={category.name}>
                 {category.name} ({category.count})
@@ -124,123 +148,313 @@ const EventList: React.FC<EventListProps> = ({ onEventSelect, onCreateEvent, onE
             ))}
           </select>
 
-          <input
-            type="text"
-            placeholder="Location"
-            value={filters.location || ''}
-            onChange={(e) => handleFilterChange('location', e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              placeholder="📍 Location"
+              value={filters.location || ''}
+              onChange={(e) => handleFilterChange('location', e.target.value)}
+              className="input"
+              style={{ paddingLeft: '2.5rem' }}
+            />
+            <div style={{
+              position: 'absolute',
+              left: '0.75rem',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              fontSize: '1rem',
+              color: 'var(--text-muted)'
+            }}>
+              📍
+            </div>
+          </div>
 
           <button
             onClick={() => setFilters({})}
-            className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+            className="btn btn-ghost"
+            style={{ whiteSpace: 'nowrap' }}
           >
-            Clear Filters
+            ✖️ Clear Filters
           </button>
         </div>
+
+        {/* Filter Summary */}
+        {Object.keys(filters).length > 0 && (
+          <div style={{ marginTop: 'var(--space-md)', paddingTop: 'var(--space-md)', borderTop: '1px solid var(--border)' }}>
+            <div className="text-body-sm" style={{ color: 'var(--text-secondary)' }}>
+              <span>Active filters: </span>
+              {filters.search && <span style={{ color: 'var(--primary)' }}>"{filters.search}" </span>}
+              {filters.category && <span style={{ color: 'var(--primary)' }}>{filters.category} </span>}
+              {filters.location && <span style={{ color: 'var(--primary)' }}>{filters.location}</span>}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Events List */}
+      {/* Events Grid */}
       {loading ? (
-        <div className="text-center py-8">Loading events...</div>
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div
+              style={{
+                width: '3rem',
+                height: '3rem',
+                background: 'var(--primary-gradient)',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto var(--space-md)',
+                animation: 'spin 1s linear infinite'
+              }}
+            >
+              <span style={{ color: 'white', fontSize: '1.25rem' }}>🎪</span>
+            </div>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)' }}>
+              Loading amazing events...
+            </p>
+          </div>
+        </div>
       ) : events.length === 0 ? (
-        <div className="text-center py-8 text-gray-500">
-          No events found. {Object.keys(filters).length > 0 ? 'Try adjusting your filters.' : 'Create the first event!'}
+        <div className="flex-center" style={{ padding: 'var(--space-3xl)' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '4rem', marginBottom: 'var(--space-lg)' }}>🎭</div>
+            <h3 className="text-heading-lg" style={{ marginBottom: 'var(--space-md)' }}>
+              {Object.keys(filters).length > 0 ? 'No events match your search' : 'No events yet'}
+            </h3>
+            <p className="text-body-md" style={{ color: 'var(--text-secondary)', marginBottom: 'var(--space-lg)' }}>
+              {Object.keys(filters).length > 0 ?
+                'Try adjusting your filters to discover more events.' :
+                'Be the first to create an amazing event!'
+              }
+            </p>
+            {Object.keys(filters).length === 0 && (
+              <button onClick={onCreateEvent} className="btn btn-primary">
+                <span>✨</span>
+                Create First Event
+              </button>
+            )}
+          </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.map((event) => (
+        <div className="grid-cards animate-fade-in">
+          {events.map((event, index) => (
             <div
               key={event.id}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer border border-gray-200"
+              className="card card-elevated"
               onClick={() => onEventSelect(event)}
+              style={{
+                cursor: 'pointer',
+                animationDelay: `${index * 0.1}s`,
+                position: 'relative',
+                overflow: 'hidden'
+              }}
             >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-xl font-semibold text-gray-900 line-clamp-2">
+              {/* Event Status Badge */}
+              <div style={{
+                position: 'absolute',
+                top: 'var(--space-md)',
+                right: 'var(--space-md)',
+                zIndex: 2
+              }}>
+                <span className={`text-caption ${
+                  event.status === 'published' ?
+                    '' : event.status === 'cancelled' ? '' : ''
+                }`} style={{
+                  padding: '0.25rem 0.75rem',
+                  borderRadius: 'var(--radius-full)',
+                  fontSize: '0.625rem',
+                  fontWeight: '600',
+                  background: event.status === 'published' ?
+                    'var(--success-light)' :
+                    event.status === 'cancelled' ?
+                      'var(--error-light)' :
+                      'var(--warning-light)',
+                  color: event.status === 'published' ?
+                    'var(--success)' :
+                    event.status === 'cancelled' ?
+                      'var(--error)' :
+                      'var(--warning)'
+                }}>
+                  {event.status.toUpperCase()}
+                </span>
+              </div>
+
+              {/* Event Illustration Header */}
+              <div style={{
+                height: '6rem',
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 'var(--space-lg)'
+              }}>
+                <div style={{
+                  fontSize: '2.5rem',
+                  filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))'
+                }}>
+                  {getCategoryEmoji(event.category)}
+                </div>
+                {/* Gradient overlay */}
+                <div style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: `linear-gradient(135deg,
+                    rgba(99, 102, 241, 0.8) 0%,
+                    rgba(139, 92, 246, 0.6) 50%,
+                    rgba(249, 115, 22, 0.4) 100%)`
+                }} />
+              </div>
+
+              {/* Event Content */}
+              <div>
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <h3 className="text-heading-md line-clamp-2" style={{ marginBottom: '0.5rem' }}>
                     {event.name}
                   </h3>
-                  <span className="text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
-                    {event.category}
-                  </span>
+                  <p className="text-body-sm line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
+                    {event.description}
+                  </p>
                 </div>
 
-                <p className="text-gray-600 mb-4 line-clamp-3">
-                  {event.description}
-                </p>
+                {/* Event Details */}
+                <div style={{ marginBottom: 'var(--space-md)' }}>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📅</span>
+                    {formatDate(event.eventTime)}
+                  </div>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>📍</span>
+                    {event.location}
+                  </div>
+                  <div className="text-body-sm" style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    color: 'var(--text-tertiary)'
+                  }}>
+                    <span style={{ fontSize: '1rem' }}>👥</span>
+                    {event.availableSeats}/{event.totalSeats} seats available
+                  </div>
+                </div>
 
-                <div className="space-y-2 text-sm text-gray-500">
-                  <div className="flex items-center">
-                    <span className="font-medium">📅</span>
-                    <span className="ml-2">{formatDate(event.eventTime)}</span>
+                {/* Footer */}
+                <div style={{
+                  paddingTop: 'var(--space-md)',
+                  borderTop: '1px solid var(--border)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <div className="text-caption" style={{ color: 'var(--text-muted)' }}>
+                    BY {event.organizerEmail === currentUserEmail ? 'YOU' : event.organizerEmail.split('@')[0].toUpperCase()}
                   </div>
-                  <div className="flex items-center">
-                    <span className="font-medium">📍</span>
-                    <span className="ml-2">{event.location}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="font-medium">👥</span>
-                    <span className="ml-2">
-                      {event.availableSeats}/{event.totalSeats} seats available
+
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    <span style={{
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--primary-light)',
+                      color: 'var(--primary)',
+                      fontSize: '0.625rem',
+                      fontWeight: '600',
+                      textTransform: 'uppercase'
+                    }}>
+                      {event.category}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4 pt-4 border-t border-gray-200">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-sm text-gray-500">
-                      By: {event.organizerEmail === currentUserEmail ? 'You' : event.organizerEmail}
-                    </span>
-                    <span className={`text-sm px-2 py-1 rounded ${
-                      event.status === 'published' ? 'bg-green-100 text-green-800' :
-                      event.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {event.status}
-                    </span>
-                  </div>
-
-                  {/* Owner Controls */}
-                  {event.organizerEmail === currentUserEmail && (
-                    <div className="flex space-x-3 pt-2 border-t border-gray-100">
+                {/* Owner Controls */}
+                {event.organizerEmail === currentUserEmail && (
+                  <div style={{
+                    marginTop: 'var(--space-md)',
+                    paddingTop: 'var(--space-md)',
+                    borderTop: '1px solid var(--border)',
+                    display: 'flex',
+                    gap: 'var(--space-sm)'
+                  }}>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onEventSelect(event);
+                      }}
+                      className="text-body-sm"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--primary)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: 'var(--radius-md)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      👁️ View
+                    </button>
+                    {onEditEvent && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          onEventSelect(event);
+                          onEditEvent(event);
                         }}
-                        className="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center"
-                      >
-                        👁️ View
-                      </button>
-                      {onEditEvent && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onEditEvent(event);
-                          }}
-                          className="text-green-600 hover:text-green-800 text-sm font-medium flex items-center"
-                        >
-                          ✏️ Edit
-                        </button>
-                      )}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteEvent(event.id, event.name);
+                        className="text-body-sm"
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'var(--secondary)',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.25rem',
+                          padding: '0.25rem 0.5rem',
+                          borderRadius: 'var(--radius-md)',
+                          transition: 'all 0.2s ease'
                         }}
-                        disabled={deleting === event.id}
-                        className={`text-sm font-medium flex items-center ${
-                          deleting === event.id
-                            ? 'text-gray-400 cursor-not-allowed'
-                            : 'text-red-600 hover:text-red-800'
-                        }`}
                       >
-                        {deleting === event.id ? '⏳ Deleting...' : '🗑️ Delete'}
+                        ✏️ Edit
                       </button>
-                    </div>
-                  )}
-                </div>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteEvent(event.id, event.name);
+                      }}
+                      disabled={deleting === event.id}
+                      className="text-body-sm"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: deleting === event.id ? 'var(--text-disabled)' : 'var(--error)',
+                        cursor: deleting === event.id ? 'not-allowed' : 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        padding: '0.25rem 0.5rem',
+                        borderRadius: 'var(--radius-md)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {deleting === event.id ? '⏳ Deleting...' : '🗑️ Delete'}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -248,6 +462,34 @@ const EventList: React.FC<EventListProps> = ({ onEventSelect, onCreateEvent, onE
       )}
     </div>
   );
+};
+
+// Helper function for category emojis
+const getCategoryEmoji = (category: string): string => {
+  const categoryEmojis: { [key: string]: string } = {
+    'Business': '💼',
+    'Technology': '💻',
+    'Education': '📚',
+    'Entertainment': '🎭',
+    'Sports': '⚽',
+    'Health': '🏥',
+    'Art': '🎨',
+    'Music': '🎵',
+    'Food': '🍽️',
+    'Travel': '✈️',
+    'Fashion': '👗',
+    'Gaming': '🎮',
+    'Science': '🔬',
+    'Photography': '📸',
+    'Writing': '✍️',
+    'Finance': '💰',
+    'Marketing': '📢',
+    'Design': '🎯',
+    'Networking': '🤝',
+    'Workshop': '🛠️'
+  };
+
+  return categoryEmojis[category] || '🎪';
 };
 
 export default EventList;

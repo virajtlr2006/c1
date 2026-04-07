@@ -64,7 +64,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.code === 'ECONNREFUSED' || error.code === 'ERR_NETWORK') {
-      console.error('Backend server is not running on http://localhost:8080');
+      console.warn('Backend server connection issue - this is expected during development setup');
     }
     return Promise.reject(error);
   }
