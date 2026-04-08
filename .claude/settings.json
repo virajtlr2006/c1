@@ -13,7 +13,9 @@
       "Bash(kill 56435)",
       "Bash(kill 72502)",
       "Bash(npx tsc:*)",
-      "Bash(ls /home/viraj-tailor/Desktop/c1/frontend/.env*)"
+      "Bash(ls /home/viraj-tailor/Desktop/c1/frontend/.env*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm type-check:*)"
     ]
   }
 }

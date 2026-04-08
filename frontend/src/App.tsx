@@ -85,7 +85,7 @@ const Navigation: React.FC<{
               <span style={{ marginRight: '0.5rem' }}>👋</span>
               {userEmail.split('@')[0]}
             </div>
-            <UserButton afterSignOutUrl="/" />
+            <UserButton />
           </div>
         </div>
       </div>
@@ -286,8 +286,8 @@ const App: React.FC = () => {
     } else if (isLoaded && !isSignedIn) {
       // Clear auth setup when not signed in
       console.log('🔧 Clearing auth setup - user not signed in');
-      setAuthTokenGetter(() => async () => null);
-      setUserEmailGetter(() => () => null);
+      setAuthTokenGetter(async () => null);
+      setUserEmailGetter(() => null);
       setAuthSetup(false);
     }
   }, [isLoaded, isSignedIn, user]);
